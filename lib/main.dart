@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft])
+      .then((_) {
+    runApp(new MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -34,54 +40,73 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter2 = 0;
 
   void _incrementCounter1() {
-    setState(() {
-      _counter1++;
-    });
+    if (this._counter1 < 11)
+      setState(() {
+        _counter1++;
+      });
   }
 
   void _incrementCounter2() {
+    if (this._counter2 < 11)
+      setState(() {
+        _counter2++;
+      });
+  }
+
+  void _resetBoard() {
     setState(() {
-      _counter2++;
+      _counter1 = 0;
+      _counter2 = 0;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              this._player1 + ' Score:',
-            ),
-            Text(
-              '$_counter1',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            Text(
-              this._player2 + ' Score:',
-            ),
-            Text(
-              '$_counter2',
-              style: Theme.of(context).textTheme.display1,
-            ),
-            FloatingActionButton(
-              onPressed: _incrementCounter1,
-              tooltip: 'Increment',
-              child: Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-            FloatingActionButton(
-              onPressed: _incrementCounter2,
-              tooltip: 'Increment',
-              child: Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          ],
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: Center(
+          child: Column(children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Column(children: <Widget>[
+                  Text(
+                    this._player1,
+                  ),
+                  RaisedButton(
+                    onPressed: _incrementCounter1,
+                    child: Text(
+                      this._counter1.toString(),
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                  ),
+                ]),
+                Column(children: <Widget>[
+                  Text(
+                    this._player2,
+                  ),
+                  RaisedButton(
+                    onPressed: _incrementCounter2,
+                    child: Text(
+                      this._counter2.toString(),
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                  ),
+                ]),
+                Column(children: <Widget>[
+                  RaisedButton(
+                    onPressed: _resetBoard,
+                    child: Text(
+                      'Reset Board',
+                      style: Theme.of(context).textTheme.display1,
+                    ),
+                  ),
+                ]),
+              ],
+            )
+          ]),
+        ));
   }
 }
